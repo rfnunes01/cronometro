@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "cronometro",
+    "name": "Cronômetro",
     "slug": "cronometro",
     "privacy": "public",
     "sdkVersion": "36.0.0",
@@ -24,11 +24,13 @@
       "**/*"
     ],
     "ios": {
+	  "bundleIdentifier": "com.rfnunes.cronometro",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
-
     "android": {
-      "package": "com.rfnunes.cronometro"
+      "package": "com.rfnunes.cronometro",
+	  "versionCode": 1
     }
   }
 }
