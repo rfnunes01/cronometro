@@ -1,139 +1,125 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import {
   View,
   Text,
   StyleSheet,
   Image,
   TouchableOpacity
-  } from 'react-native';
+} from 'react-native';
 
-class App extends Component{
+export default function App() {
 
-  constructor(props){
-    super(props);
-    this.state = {
-      numero: 0,
-      botao: 'VAI',
-      ultimo: null
-    };
+  const [numero, setNumero] = useState(0);
+  const [botao, setBotao] = useState('VAI');
+  const [ultimo, setUltimo] = useState(null);
+  const [timer, setTimer] = useState(null);
 
-    //Variavel do timer do relogio.
-    this.timer = null;
+  const vai = () => {
 
-    this.vai = this.vai.bind(this);
-    this.limpar = this.limpar.bind(this);
-  }
-
-  vai(){
-
-    if(this.timer != null){
+    if (timer != null) {
       //Aqui vai parar o timer
-      clearInterval(this.timer);
-      this.timer = null;
+      clearInterval(timer);
+      setTimer(null);
+      setBotao('VAI');
 
-      this.setState({botao: 'VAI'});
-    }else{
+    } else {
 
       //Comeca girar o timer
-      this.timer = setInterval( ()=> {
-        this.setState({numero: this.state.numero + 0.1})
-      }, 100);
+      setTimer(setInterval(() => {
+        setNumero(prevState => prevState + 0.1);
+      }, 100));
 
-      this.setState({botao: 'PARAR'});
+      setBotao('PARAR');
     }
 
   }
 
-  limpar(){
-    if(this.timer != null){
+  const limpar = () => {
+    if (timer != null) {
       //Aqui vai parar o timer
-      clearInterval(this.timer);
-      this.timer = null;
+      clearInterval(timer);
+      setTimer(null);
     }
-    this.setState({
-      ultimo: this.state.numero,
-      numero: 0,
-      botao: 'VAI'
-    })
+
+    setUltimo(numero);
+    setNumero(0);
+    setBotao('VAI');
+
   }
 
-  render(){
-    return(
-      <View style={styles.container}>  
+  return (
+    <View style={styles.container}>
 
       <Image
-      source={require('./assets/cronometro.png')}
-      style={styles.cronometro}
+        source={require('./assets/cronometro.png')}
+        style={styles.cronometro}
       />
 
-      <Text style={styles.timer}> {this.state.numero.toFixed(1)} </Text>
+      <Text style={styles.timer}> {numero.toFixed(1)} </Text>
 
       <View style={styles.btnArea}>
 
-        <TouchableOpacity style={styles.btn} onPress={this.vai}>
-          <Text style={styles.btnTexto}> {this.state.botao} </Text>
+        <TouchableOpacity style={styles.btn} onPress={() => vai()}>
+          <Text style={styles.btnTexto}> {botao} </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.btn} onPress={this.limpar}>
+        <TouchableOpacity style={styles.btn} onPress={() => limpar()}>
           <Text style={styles.btnTexto}>LIMPAR</Text>
         </TouchableOpacity>
 
       </View>
 
       <View style={styles.areaUltima}>
-          <Text style={styles.textoCorrida}>
-            {this.state.ultimo > 0 ? 'Ultimo tempo: ' + this.state.ultimo.toFixed(2) + 's' : ''}
-          </Text>
+        <Text style={styles.textoCorrida}>
+          {ultimo > 0 ? 'Ultimo tempo: ' + ultimo.toFixed(2) + 's' : ''}
+        </Text>
       </View>
 
 
-      </View>    
-    );
-  }
-
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    alignItems:'center',
+  container: {
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#00aeef'
   },
-  timer:{
-    marginTop:-160,
+  timer: {
+    marginTop: -160,
     color: '#FFF',
     fontSize: 50,
     fontWeight: 'bold'
   },
-  btnArea:{
+  btnArea: {
     flexDirection: 'row',
     marginTop: 70,
     height: 40
   },
-  btn:{
-    flex:1,
-    justifyContent:'center',
+  btn: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFF',
     height: 40,
     margin: 17,
-	marginTop:40,
+    marginTop: 40,
     borderRadius: 9
   },
-  btnTexto:{
+  btnTexto: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#00aeef'
   },
-  areaUltima:{
+  areaUltima: {
     marginTop: 40,
   },
-  textoCorrida:{
-    fontSize:25,
-    fontStyle:'italic',
+  textoCorrida: {
+    fontSize: 25,
+    fontStyle: 'italic',
     color: '#FFF'
   }
 });
-
-export default App;
